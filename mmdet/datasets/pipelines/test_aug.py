@@ -36,3 +36,9 @@ class MultiScaleFlipAug(object):
         repr_str += f'(transforms={self.transforms}, '
         repr_str += f'img_scale={self.img_scale}, flip={self.flip})'
         return repr_str
+
+
+@PIPELINES.register_module()
+class AnotherTest(object):
+
+    pass
