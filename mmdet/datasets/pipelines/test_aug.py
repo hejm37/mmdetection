@@ -41,4 +41,5 @@ class MultiScaleFlipAug(object):
 @PIPELINES.register_module()
 class AnotherTest(object):
 
-    pass
+    def __init__(self):
+        super().__init__()
