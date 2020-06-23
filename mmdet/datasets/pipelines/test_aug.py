@@ -45,4 +45,5 @@ class TestTravis(object):
         pass
 
     def __call__(self, results):
+        pass
         return results
