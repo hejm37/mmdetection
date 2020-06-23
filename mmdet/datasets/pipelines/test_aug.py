@@ -41,4 +41,5 @@ class MultiScaleFlipAug(object):
 @PIPELINES.register_module()
 class TestTravis(object):
 
-    pass
+    def __init__(self):
+        pass
