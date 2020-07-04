@@ -43,4 +43,4 @@ class AnotherTest(object):
 
     def __init__(self):
         super().__init__()
-        print('Hello World!!!!!!!')
+        print('Hello World!!!!!!')
