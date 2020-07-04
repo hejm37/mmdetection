@@ -16,9 +16,9 @@ def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
                 stage("${docker_image}-install") {
                     sh "pip install Pillow==6.2.2 -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com # remove this line when torchvision>=0.5"
                     sh "pip install torch==${env_torch} torchvision==${env_torchvision} -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
-                    sh "pip install mmcv-nightly"
-                    sh "pip install 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'"
-                    sh "pip install -r requirements.txt"
+                    sh "pip install mmcv-nightly -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
+                    sh "pip install 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI' -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
+                    sh "pip install -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
                 }
                 stage("${docker_image}-before_script") {
                     sh "flake8 ."
