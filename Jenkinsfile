@@ -1,4 +1,4 @@
-def docker_images = ["python:cuda10.1-cudnn7-devel-ubuntu18.04-py37", "python:cuda10.1-cudnn7-devel-ubuntu18.04-py36"]
+def docker_images = ["hejm37/python-envs:cuda10.1-cudnn7-devel-ubuntu18.04-py37", "hejm37/python-envs:cuda10.1-cudnn7-devel-ubuntu18.04-py36"]
 def torch_versions = ["1.3.1", "1.5.0"]
 def torchvision_versions = ["0.4.2", "0.6.0"]
 def cuda_archs = ["6.0", "7.0"]
