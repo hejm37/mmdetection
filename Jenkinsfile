@@ -17,6 +17,8 @@ def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
                     sh "pip install Pillow==6.2.2 -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com # remove this line when torchvision>=0.5"
                     sh "pip install torch==${env_torch} torchvision==${env_torchvision} -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
                     sh "pip install mmcv-nightly -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
+                    sh "export https_proxy=61.160.210.234:808 # setup proxy for git clone"
+                    sh "git config --global https.proxy https://61.160.210.234:808 # setup proxy for git clone"
                     sh "pip install 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI' -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
                     sh "pip install -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
                 }
