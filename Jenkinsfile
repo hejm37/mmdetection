@@ -3,11 +3,21 @@ def torch_versions = ["1.3.1", "1.5.0"]
 def torchvision_versions = ["0.4.2", "0.6.0"]
 def cuda_archs = ["6.0", "7.0"]
 
-def setBuildStatus(message, state, tag) {
+// def setBuildStatus(message, state, tag) {
+//   step([
+//       $class: "GitHubCommitStatusSetter",
+//       reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.GIT_URL],
+//       contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status/${tag}"],
+//       errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+//       statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+//   ]);
+// }
+
+void setBuildStatus(String message, String state) {
   step([
       $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.GIT_URL],
-      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status/${tag}"],
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/my-org/my-repo"],
+      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
       errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
       statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
   ]);
@@ -46,11 +56,13 @@ def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
                 // only if success
                 sh "coverage report -m"
                 // githubNotify description: 'This is a shorted example',  status: 'SUCCESS'
-                setBuildStatus("Build succeeded", "SUCCESS", "${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}")
+                // setBuildStatus("Build succeeded", "SUCCESS", "${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}")
+                setBuildStatus("Build succeeded", "SUCCESS")
             } catch(e) {
                 echo "Build failed for ${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}"
                 // githubNotify description: 'This is a shorted example',  status: 'FAILURE'
-                setBuildStatus("Build failed", "FAILURE", "${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}")
+                // setBuildStatus("Build failed", "FAILURE", "${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}")
+                setBuildStatus("Build failed", "FAILURE")
                 throw e
             }
         }
