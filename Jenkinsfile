@@ -7,6 +7,7 @@ def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
     stages = {
         docker.image(docker_image).inside('-u root --gpus all') {
             try {
+                checkout scm
                 // githubNotify description: 'This is a shorted example',  status: 'PENDING'
 
                 stage("${docker_image}") {
