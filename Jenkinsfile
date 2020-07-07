@@ -28,9 +28,9 @@ def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
         docker.image(docker_image).inside('-u root --gpus all') {
             try {
                 // githubNotify description: 'This is a shorted example',  status: 'PENDING'
-                githubNotify account: '1052020748@qq.com', context: 'Final Test', credentialsId: '4af7991d-c744-4691-915e-e8c4866b4c5c',
-                    description: 'This is an example', repo: 'https://github.com/hejm37/mmdetection',
-                    status: 'PENDING', targetUrl: 'http://47.111.254.199:11200/'
+                // githubNotify account: '1052020748@qq.com', context: 'Final Test', credentialsId: '4af7991d-c744-4691-915e-e8c4866b4c5c',
+                //     description: 'This is an example', repo: 'https://github.com/hejm37/mmdetection',
+                //     status: 'PENDING', targetUrl: 'http://47.111.254.199:11200/'
 
                 stage("${docker_image}") {
                     sh "echo 'Running in ${docker_image}'"
@@ -60,12 +60,12 @@ def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
                 sh "coverage report -m"
                 // githubNotify description: 'This is a shorted example',  status: 'SUCCESS'
                 // setBuildStatus("Build succeeded", "SUCCESS", "${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}")
-                // setBuildStatus("Build succeeded", "SUCCESS")
+                setBuildStatus("Build succeeded", "SUCCESS")
             } catch(e) {
                 echo "Build failed for ${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}"
-                githubNotify description: 'This is a shorted example',  status: 'FAILURE'
+                // githubNotify description: 'This is a shorted example',  status: 'FAILURE'
                 // setBuildStatus("Build failed", "FAILURE", "${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}")
-                // setBuildStatus("Build failed", "FAILURE")
+                setBuildStatus("Build failed", "FAILURE")
                 throw e
             }
         }
