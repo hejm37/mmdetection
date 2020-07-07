@@ -24,6 +24,8 @@ void setBuildStatus(String message, String state) {
 }
 
 def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
+    tag = docker_image + '_' + torch + '_' + torchvision + '_' + cuda_arch
+    aliyun_mirror_args = "-i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
     stages = {
         docker.image(docker_image).inside('-u root --gpus all') {
             try {
@@ -36,11 +38,11 @@ def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
                     sh "apt-get install -y ninja-build"
                 }
                 stage("${docker_image}-install") {
-                    sh "pip install Pillow==6.2.2 -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com # remove this line when torchvision>=0.5"
-                    sh "pip install torch==${env_torch} torchvision==${env_torchvision} -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
-                    sh "pip install mmcv-nightly -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
-                    sh "pip install 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI' -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
-                    sh "pip install -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
+                    sh "pip install Pillow==6.2.2 ${aliyun_mirror_args} # remove this line when torchvision>=0.5"
+                    sh "pip install torch==${env_torch} torchvision==${env_torchvision} ${aliyun_mirror_args}"
+                    sh "pip install mmcv-nightly ${aliyun_mirror_args}"
+                    sh "pip install 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI' ${aliyun_mirror_args}"
+                    sh "pip install -r requirements.txt ${aliyun_mirror_args}"
                 }
                 stage("${docker_image}-before_script") {
                     sh "flake8 ."
@@ -56,12 +58,12 @@ def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
                 // only if success
                 sh "coverage report -m"
                 // githubNotify description: 'This is a shorted example',  status: 'SUCCESS'
-                // setBuildStatus("Build succeeded", "SUCCESS", "${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}")
+                // setBuildStatus("Build succeeded", "SUCCESS", "${tag}")
                 setBuildStatus("Build succeeded", "SUCCESS")
             } catch(e) {
-                echo "Build failed for ${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}"
+                echo "Build failed for ${tag}"
                 // githubNotify description: 'This is a shorted example',  status: 'FAILURE'
-                // setBuildStatus("Build failed", "FAILURE", "${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}")
+                // setBuildStatus("Build failed", "FAILURE", "${tag}")
                 setBuildStatus("Build failed", "FAILURE")
                 throw e
             }
