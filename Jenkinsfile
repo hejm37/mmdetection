@@ -13,7 +13,7 @@ def setBuildStatus(message, state, tag) {
   ]);
 }
 
-void setBuildStatus_(String message, String state) {
+void setBuildStatus2(String message, String state) {
   step([
       $class: "GitHubCommitStatusSetter",
       reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/my-org/my-repo"],
@@ -59,12 +59,12 @@ def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
                 sh "coverage report -m"
                 // githubNotify description: 'This is a shorted example',  status: 'SUCCESS'
                 setBuildStatus("Build succeeded", "SUCCESS", "${tag}")
-                // setBuildStatus_("Build succeeded", "SUCCESS")
+                // setBuildStatus2("Build succeeded", "SUCCESS")
             } catch(e) {
                 echo "Build failed for ${tag}"
                 // githubNotify description: 'This is a shorted example',  status: 'FAILURE'
                 setBuildStatus("Build failed", "FAILURE", "${tag}")
-                // setBuildStatus_("Build failed", "FAILURE")
+                // setBuildStatus2("Build failed", "FAILURE")
                 throw e
             }
         }
