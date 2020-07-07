@@ -83,7 +83,7 @@ node('master') {
         }
     }
 
-    // checkout scm
+    checkout scm
 
     parallel stages
 
