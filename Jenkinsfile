@@ -24,8 +24,8 @@ void setBuildStatus_(String message, String state) {
 }
 
 def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
-    tag = docker_image + '_' + torch + '_' + torchvision + '_' + cuda_arch
-    aliyun_mirror_args = "-i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
+    def tag = docker_image + '_' + torch + '_' + torchvision + '_' + cuda_arch
+    def aliyun_mirror_args = "-i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
     stages = {
         docker.image(docker_image).inside('-u root --gpus all') {
             try {
