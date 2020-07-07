@@ -57,12 +57,12 @@ def get_stages(docker_image, env_torch, env_torchvision, env_cuda_arch) {
                 sh "coverage report -m"
                 // githubNotify description: 'This is a shorted example',  status: 'SUCCESS'
                 // setBuildStatus("Build succeeded", "SUCCESS", "${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}")
-                // setBuildStatus("Build succeeded", "SUCCESS")
+                setBuildStatus("Build succeeded", "SUCCESS")
             } catch(e) {
                 echo "Build failed for ${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}"
                 // githubNotify description: 'This is a shorted example',  status: 'FAILURE'
                 // setBuildStatus("Build failed", "FAILURE", "${docker_image}_${env_torch}_${env_torchvision}_${env_cuda_arch}")
-                // setBuildStatus("Build failed", "FAILURE")
+                setBuildStatus("Build failed", "FAILURE")
                 throw e
             }
         }
