@@ -3,25 +3,6 @@ def torch_versions = ["1.3.1", "1.5.0"]
 def torchvision_versions = ["0.4.2", "0.6.0"]
 def cuda_archs = ["6.0", "7.0"]
 
-def setBuildStatus(message, state, tag) {
-  step([
-      $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.GIT_URL],
-      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status/${tag}"],
-      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
-  ]);
-}
-
-void setBuildStatus_(String message, String state) {
-  step([
-      $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/my-org/my-repo"],
-      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
-  ]);
-}
 
 def get_stages(docker_image, torch, torchvision, cuda_arch) {
     def tag = docker_image + '_' + torch + '_' + torchvision + '_' + cuda_arch
@@ -29,8 +10,6 @@ def get_stages(docker_image, torch, torchvision, cuda_arch) {
     stages = {
         docker.image(docker_image).inside('-u root --gpus all') {
             try {
-                // githubNotify description: 'This is a shorted example',  status: 'PENDING'
-
                 stage("${docker_image}") {
                     sh "echo 'Running in ${docker_image}'"
                 }
@@ -57,20 +36,15 @@ def get_stages(docker_image, torch, torchvision, cuda_arch) {
 
                 // only if success
                 sh "coverage report -m"
-                // githubNotify description: 'This is a shorted example',  status: 'SUCCESS'
-                setBuildStatus("Build succeeded", "SUCCESS", "${tag}")
-                // setBuildStatus_("Build succeeded", "SUCCESS")
             } catch(e) {
                 echo "Build failed for ${tag}"
-                // githubNotify description: 'This is a shorted example',  status: 'FAILURE'
-                setBuildStatus("Build failed", "FAILURE", "${tag}")
-                // setBuildStatus_("Build failed", "FAILURE")
                 throw e
             }
         }
     }
     return stages
 }
+
 
 node('master') {
     def stages = [:]
@@ -85,6 +59,7 @@ node('master') {
         }
     }
 
+    // fetch latest change from SCM (Source Control Management)
     checkout scm
 
     parallel stages
