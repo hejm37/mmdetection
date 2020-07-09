@@ -44,7 +44,7 @@ def get_stages(docker_image) {
 node('master') {
     def stages = [:]
     for (int i = 0; i < docker_images.size(); i++) {
-        stages[docker_image[i]] = get_stages(docker_image[i])
+        stages[docker_images[i]] = get_stages(docker_images[i])
     }
 
     // fetch latest change from SCM (Source Control Management)
