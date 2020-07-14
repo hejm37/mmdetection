@@ -50,5 +50,6 @@ node('master') {
     // fetch latest change from SCM (Source Control Management)
     checkout scm
 
+    // temp
     parallel stages
 }
