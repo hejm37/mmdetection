@@ -12,7 +12,7 @@ def get_stages(docker_image) {
                     sh "echo 'Running in ${docker_image}'"
                 }
                 stage("${docker_image}-before_install") {
-                    sh "apt-get install -y ninja-build"
+                    sh "apt-get update && apt-get install -y ninja-build"
                 }
                 stage("${docker_image}-install") {
                     sh "pip install Pillow==6.2.2 ${aliyun_mirror_args} # remove this line when torchvision>=0.5"
