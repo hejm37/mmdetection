@@ -6,7 +6,7 @@ def torchvision_versions = ["0.4.2", "0.6.0"]
 def get_stages(docker_image) {
     def aliyun_mirror_args = "-i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com"
     stages = {
-        docker.image(docker_image).inside('-u root --gpus all') {
+        withDockerContainer(docker_image) {
             try {
                 stage("${docker_image}") {
                     sh "pwd"
