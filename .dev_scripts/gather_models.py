@@ -10,13 +10,13 @@ import torch
 
 # build schedule look-up table to automatically find the final model
 SCHEDULES_LUT = {
-    '1x': 12,
-    '2x': 24,
-    '20e': 20,
-    '3x': 36,
-    '4x': 48,
-    '24e': 24,
-    '6x': 73
+    '_1x_': 12,
+    '_2x_': 24,
+    '_20e_': 20,
+    '_3x_': 36,
+    '_4x_': 48,
+    '_24e_': 24,
+    '_6x_': 73
 }
 RESULTS_LUT = ['bbox_mAP', 'segm_mAP']
 
@@ -131,11 +131,8 @@ def main():
         mmcv.mkdir_or_exist(model_publish_dir)
 
         model_name = osp.split(model['config'])[-1].split('.')[0]
-        for k, v in model['results'].items():
-            if k == 'memory':
-                continue
-            model_name += '_{}-{}_'.format(k, v)
-        model_name += model['model_time']
+
+        model_name += '_' + model['model_time']
         publish_model_path = osp.join(model_publish_dir, model_name)
         trained_model_path = osp.join(models_root, model['config'],
                                       'epoch_{}.pth'.format(model['epochs']))
@@ -147,12 +144,11 @@ def main():
         # copy log
         shutil.copy(
             osp.join(models_root, model['config'], model['log_json_path']),
-            osp.join(model_publish_dir, model['log_json_path']))
+            osp.join(model_publish_dir, f'{model_name}.log.json'))
         shutil.copy(
             osp.join(models_root, model['config'],
                      model['log_json_path'].rstrip('.json')),
-            osp.join(model_publish_dir,
-                     model['log_json_path'].rstrip('.json')))
+            osp.join(model_publish_dir, f'{model_name}.log'))
 
         # copy config to guarantee reproducibility
         config_path = model['config']
@@ -167,6 +163,7 @@ def main():
         publish_model_infos.append(model)
 
     models = dict(models=publish_model_infos)
+    print(f'Totally gathered {len(publish_model_infos)} models')
     mmcv.dump(models, osp.join(models_out, 'model_info.json'))
 
 
