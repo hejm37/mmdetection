@@ -1,4 +1,4 @@
-def docker_images = ["hejm37/torch-envs:10.1-cudnn7-devel-ubuntu18.04-pt1.3", "hejm37/torch-envs:10.2-cudnn7-devel-ubuntu18.04-pt1.5"]
+def docker_images = ["hejm37/torch-envs:10.1-cudnn7-devel-ubuntu18.04-pt1.3"]
 def torch_versions = ["1.3.0", "1.5.0"]
 def torchvision_versions = ["0.4.2", "0.6.0"]
 
