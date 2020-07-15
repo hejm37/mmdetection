@@ -1,4 +1,4 @@
-def docker_images = ["hejm37/torch-envs:10.1-cudnn7-devel-ubuntu18.04-pt1.3"]
+def docker_images = ["hejm37/torch-envs:10.1-cudnn7-devel-ubuntu18.04-pt1.3", "hejm37/torch-envs:10.2-cudnn7-devel-ubuntu18.04-pt1.5"]
 def torch_versions = ["1.3.0", "1.5.0"]
 def torchvision_versions = ["0.4.2", "0.6.0"]
 
@@ -16,7 +16,7 @@ def get_stages(docker_image) {
                 }
                 stage("${docker_image}-install") {
                     sh "pip install Pillow==6.2.2 ${aliyun_mirror_args} # remove this line when torchvision>=0.5"
-                    sh "pip install mmcv-nightly ${aliyun_mirror_args}"
+                    sh "pip install mmcv-full ${aliyun_mirror_args}"
                     sh "pip install 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI' ${aliyun_mirror_args}"
                     sh "pip install -r requirements.txt ${aliyun_mirror_args}"
                 }
