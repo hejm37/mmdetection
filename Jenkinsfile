@@ -1,4 +1,6 @@
-def docker_images = ["pytorch/pytorch:1.3-cuda10.1-cudnn7-devel", "pytorch/pytorch:1.5.1-cuda10.1-cudnn7-devel"]
+def docker_images = ["hejm37/torch-envs:10.1-cudnn7-devel-ubuntu18.04-pt1.3", "hejm37/torch-envs:10.2-cudnn7-devel-ubuntu18.04-pt1.5"]
+def torch_versions = ["1.3.0", "1.5.0"]
+def torchvision_versions = ["0.4.2", "0.6.0"]
 
 
 def get_stages(docker_image) {
@@ -42,14 +44,16 @@ def get_stages(docker_image) {
 
 
 node('master') {
-    def stages = [:]
-    for (int i = 0; i < docker_images.size(); i++) {
-        stages[docker_images[i]] = get_stages(docker_images[i])
-    }
-
     // fetch latest change from SCM (Source Control Management)
     checkout scm
 
-    // temp
+    def stages = [:]
+    for (int i = 0; i < docker_images.size(); i++) {
+        def docker_image = docker_images[i]
+        def torch = torch_versions[i]
+        def torchvision = torchvision_versions[i]
+        def tag = docker_image + '_' + torch + '_' + torchvision
+        stages[tag] = get_stages(docker_image)
+    }
     parallel stages
 }
