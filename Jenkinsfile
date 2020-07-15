@@ -9,6 +9,8 @@ def get_stages(docker_image) {
         docker.image(docker_image).inside('-u root --gpus all') {
             try {
                 stage("${docker_image}") {
+                    sh "pwd"
+                    sh "ls"
                     sh "echo 'Running in ${docker_image}'"
                 }
                 stage("${docker_image}-before_install") {
